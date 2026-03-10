@@ -1,0 +1,62 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de distribución / paquetes
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info/
+*.eggs/
+
+# Instalaciones de pip
+*.log
+*.pot
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Archivos de base de datos
+*.db
+*.sqlite3
+
+# Archivos de entorno
+.env
+.flaskenv
+.dockerignore
+
+# Archivos de documentación
+/site
+/manual
+
+# Archivos de testing
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+
+# Archivos de logs
+*.log
+logs/
