@@ -1,5 +1,6 @@
 from forecast_model.linear_model import LinearPSOModel
 from forecast_model.ridge_model import RidgePSOModel
+from forecast_model.lasso_model import LassoPSOModel
 from forecast_model.runner_model import ModelRunner
 
 import pandas as pd
@@ -26,6 +27,7 @@ def train_windows(series, windows, test_size=12):
 
             runner.add_model(LinearPSOModel(series, lag=w))
             runner.add_model(RidgePSOModel(series, lag=w))
+            runner.add_model(LassoPSOModel(series, lag=w))
 
             results = runner.run()
 
@@ -99,9 +101,9 @@ def plot_real_vs_pred(codigo, y_test, y_pred, folder="plots"):
 # DATASET
 # ---------------------------------
 
-df = pd.read_csv("./dataset/proyectar_706101.csv")
+df = pd.read_csv("./dataset/proyectar_706101_copy.csv")
 
-windows = [3,6,12,24]
+windows = [2,3,5,6,7,8,9,10,11,12]
 
 rmse_rows = []
 test_rows = []
@@ -143,10 +145,11 @@ for idx, row in df.iterrows():
 
     linear_model = LinearPSOModel(serie, lag=best_lag)
     ridge_model = RidgePSOModel(serie, lag=best_lag)
+    lasso_model = LassoPSOModel(serie, lag=best_lag)
 
     runner.add_model(linear_model)
     runner.add_model(ridge_model)
-
+    runner.add_model(lasso_model)
     results = runner.run()
 
     # -----------------------------
@@ -210,6 +213,9 @@ for idx, row in df.iterrows():
 
         name = model.__class__.__name__
 
+        # REENTRENAR CON TODA LA SERIE
+        model.refit_full_series()
+
         future = model.forecast(13)
 
         future = trend_correction(serie, future)
@@ -229,6 +235,8 @@ for idx, row in df.iterrows():
     # -----------------------------
     # FORECAST ENSEMBLE
     # -----------------------------
+    linear_model.refit_full_series()
+    ridge_model.refit_full_series()
 
     forecast = ensemble_forecast(linear_model, ridge_model)
 
@@ -243,7 +251,7 @@ for idx, row in df.iterrows():
 
         row_future[m] = float(v)
 
-future_rows.append(row_future)
+    future_rows.append(row_future)
 
 
 # ---------------------------------
